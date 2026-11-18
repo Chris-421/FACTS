@@ -64,6 +64,7 @@ class WorkingLoss:
         self.started = {}
         self.pending = {}
         self.outstanding = {}
+        self.shift_exposure = {}
         self.generated = dict.fromkeys(stations, 0.)
 
     def schedule_recovery(self, engine, key):
@@ -73,12 +74,18 @@ class WorkingLoss:
             engine.queue.add(station.t_done, Event.STATION_RECOVERY, key)
 
     def begin_shift(self, engine):
-        for key in self.outstanding:
+        for key, remaining in self.outstanding.items():
+            self.shift_exposure[key] = engine.now, remaining
             self.schedule_recovery(engine, key)
 
-    def advance(self, elapsed):
-        for key, remaining in self.outstanding.items():
-            self.outstanding[key] = max(0., remaining - elapsed)
+    def advance(self, when):
+        # Measure from the shift opening or activation, independently of intervening events.
+        for key, (start, remaining) in self.shift_exposure.items():
+            self.outstanding[key] = max(0., remaining - minute_count(when - start))
+
+    def recover(self, key):
+        self.outstanding.pop(key, None)
+        self.shift_exposure.pop(key, None)
 
     def finish(self, engine, station, rng):
         key = station.ID_WS
@@ -111,6 +118,7 @@ class WorkingLoss:
         self.outstanding[key] = total
         station.state, station.reason = "unavailable", "GENERIC_EFFICIENCY"
         if engine.factory.active:
+            self.shift_exposure[key] = engine.now, total
             self.schedule_recovery(engine, key)
         engine.journal.event(engine.now, "station", key, "unavailability_start", "available", "unavailable",
                              reason=station.reason, duration_minutes=total, underlying_minutes=draws,

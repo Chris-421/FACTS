@@ -185,6 +185,12 @@ class PoissonWorkflowTests(unittest.TestCase):
             self.assertEqual(row.timestamp.item(), at(started))
             self.assertEqual(result.orders.set_index("ID_O").loc["R", "completion_time"], at(last))
 
+    def test_unrelated_dispatch_events_do_not_change_a_paired_recovery_clock(self):
+        data, initial, rfq, _ = decision_factory()
+        pairs = compare_rfq(data, initial, rfq, efficiency=PoissonEfficiencySettings(.74), seed=7704345770306405397)
+        side = pairs.existing_orders.set_index("ID_O").loc["SIDE"]
+        self.assertEqual(side.completion_time_change, pd.Timedelta(0))
+
 
 class DecisionScenarioTests(unittest.TestCase):
     def test_single_machine_queue_and_station_utilization_reconcile(self):

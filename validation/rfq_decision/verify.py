@@ -61,11 +61,18 @@ def poisson_replay():
                           idle_policy=idle, seed=seed, limits=limits)
         current = simulate(data, state, efficiency=PoissonEfficiencySettings(eta, ParetoDowntime(), idle),
                            seed=seed, limits=limits)
-        pd.testing.assert_series_equal(old.orders.completion_time, current.orders.completion_time)
+        old_dates = old.orders.completion_time
+        current_dates = current.orders.completion_time
+        pd.testing.assert_series_equal(old_dates.notna(), current_dates.notna())
+        occupied = old_dates.notna()
+        delta = (old_dates[occupied] - current_dates[occupied]).abs()
+        worst_difference = int(delta.max().value) if len(delta) else 0
+        assert worst_difference <= 100, worst_difference
         for col in ("generic_unavailability_time", "generic_downtime_generated", "generic_downtime_outstanding",
                     "generic_downtime_pending", "observed_shift_time", "processing_time"):
             np.testing.assert_allclose(old.stations[col], current.stations[col], rtol=1e-12, atol=2e-6)
-        summary.append({"operation_minutes": duration, "shifts": shifts, "eta": eta, "seed": seed, "activation": idle})
+        summary.append({"operation_minutes": duration, "shifts": shifts, "eta": eta, "seed": seed, "activation": idle,
+                        "maximum_completion_difference_ns": worst_difference})
     return summary
 
 

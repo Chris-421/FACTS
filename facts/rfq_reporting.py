@@ -29,8 +29,8 @@ def _serial(value):
     return value
 
 
-def _date(value):
-    return "Unidentified" if value is None else pd.Timestamp(value).isoformat(sep=" ", timespec="seconds")
+def _date(value, *, exact=False):
+    return "Unidentified" if value is None else pd.Timestamp(value).isoformat(sep=" ", timespec="auto" if exact else "seconds")
 
 
 def _number(value, *, signed=False):
@@ -73,7 +73,7 @@ def render_rfq_markdown(decision):
     if commitment["recommended_commitment"] is None:
         report.append("**Commitment unavailable.** The selected production quantile or a feasible dispatch time could not be identified.")
     else:
-        report.append(f'**Recommended {commitment["commitment_basis"]} · {_date(commitment["recommended_commitment"])}**')
+        report.append(f'**Recommended {commitment["commitment_basis"]} · {_date(commitment["recommended_commitment"], exact=True)}**')
     report.extend(["", f'The {commitment["threshold"]:.0%} policy uses the planner-weighted, capped 80/20 production forecast. '
                    f'The production quantile is {_date(commitment["recommended_production_completion"])}. '
                    f'The requested date is {_date(commitment["customer_requested_date"])}. '

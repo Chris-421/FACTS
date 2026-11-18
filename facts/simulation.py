@@ -295,7 +295,7 @@ class Simulation:
         if self.observer is not None and self.factory.active and elapsed > 0:
             self.observer.observe(self, when)
         if self.uncertainty.working_loss is not None and self.factory.active:
-            self.uncertainty.working_loss.advance(elapsed)
+            self.uncertainty.working_loss.advance(when)
         for job in self.model.jobs.values():
             if job.state == "waiting":
                 self.wait[job.ID_J] += elapsed

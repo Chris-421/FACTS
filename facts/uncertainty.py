@@ -206,7 +206,7 @@ class Uncertainty:
 
     def recover(self, engine, station):
         if self.working_loss is not None:
-            self.working_loss.outstanding.pop(station.ID_WS, None)
+            self.working_loss.recover(station.ID_WS)
         clock = self.clocks.get(station.ID_WS)
         if clock is None:
             return
