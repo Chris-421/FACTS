@@ -85,3 +85,45 @@ The existing `Factory_Model.xlsx` and prototype scripts use a legacy workbook la
 ## Integrated RFQ decision support
 
 `facts.assess_rfq` uses the factory snapshot and planner efficiency probabilities to produce a recommended commitment, capped Pareto sensitivity, and a matched assessment of existing commitments. The report also identifies queue constraints and ranks explicit machine and supplier risks through paired controls. [Workflow and configuration](docs/rfq_decision.md) · [Synthetic report](validation/rfq_decision/example/decision.md)
+
+### Run an RFQ assessment
+
+Run the synthetic job-shop example from the repository root.
+
+```powershell
+.\.venv\Scripts\python.exe -m examples.rfq_decision --output rfq-output
+```
+
+For your own assessment, pass the six factory tables, the starting snapshot, and a one-row `Orders` table for the RFQ. Each order line is a separate job. The Python example below supplies those inputs from the synthetic fixture. Replace them with your own factory data, snapshot, and prospective order.
+
+```python
+from examples.rfq_decision import HORIZON, decision_factory
+from facts import PlannerEfficiency, RFQSettings, assess_rfq, write_rfq_report
+
+data, initial, rfq, risk = decision_factory()
+planner = PlannerEfficiency(estimate=.75, certainty="medium", minimum=.65, maximum=.85)
+settings = RFQSettings(
+    until=HORIZON,
+    seed=20261120,
+    commitment_probability=.90,
+    dispatch_cutoff="14:30",
+    practical_delay_minutes=45,
+)
+result = assess_rfq(data, initial, rfq, planner=planner, settings=settings, risk=risk)
+write_rfq_report(result, "rfq-output")
+```
+
+Open `rfq-output/decision.md` for the planner report. The same directory contains `decision.json` for integration and compressed simulation traces. The report compares the RFQ with the original backlog under matched random streams and shows which existing commitments are at risk.
+
+### Modeling assumptions
+
+- **Planner efficiency.** Each trajectory draws one efficiency and keeps it for that run. `PlannerEfficiency` puts probability on whole percentages within the supplied bounds. The default half-weight distances from the estimate are 8, 4, and 2 percentage points for low, medium, and high certainty. You can configure these distances or supply explicit weights.
+- **Downtime.** The RFQ forecast draws a Poisson count after each completed operation and sums the independent capped Pareto durations. Each draw has a one-working-minute minimum and a 480-working-minute cap. A combined outage can exceed 480 minutes. Downtime pauses during closures. The workflow defaults to immediate activation and supports `idle_policy="next_assignment"`. The low-level simulator's generic default is the shift-budget model. `PoissonEfficiencySettings` selects the Poisson model explicitly.
+- **Commitment.** RFQ production ends when all its jobs finish. The quote uses the empirical P90 of the central 80/20 scenario by default, then applies the working calendar and any dispatch cutoff. The date describes production completion or modeled dispatch. Transit time is outside the model. Unfinished runs retain their probability mass, so the quote can be unavailable when the selected quantile is unresolved.
+- **Sensitivity and risk.** The 70/30, 80/20, and 90/10 labels describe the underlying Pareto shapes before capping. Their percentile range measures sensitivity to those assumptions. Monte Carlo intervals describe sampling uncertainty separately. Explicit machine failure and supplier lead-time controls run in a separate analysis. The quote comes only from the generic-efficiency forecast.
+
+### RFQ validation
+
+The integrated validation passed 43 core tests and 28 earlier validation checks. It reproduced all 913 placements across 24 archived deterministic schedules. Four capped-Poisson replays matched the archived V2 order-completion timestamps. Controlled cases verified capacity waits, material shortages, interacting risks, censoring, and delays to existing orders. [Validation report](validation/rfq_decision/validation_report.md) · [Verification record](validation/rfq_decision/verification.json)
+
+The published two-job example used 2,000 trajectories per Pareto shape. The central forecast recommended dispatch at about **12:46 on 16 November 2026**, with **98.1%** modeled probability of completing production by 15:00. Its P90 ranged from about **12:44 to 12:52** across the three assumptions. These are synthetic results. Delivery accuracy against real factory records, the planner certainty weights, and the downtime assumptions still need empirical validation. [Example report](validation/rfq_decision/example/decision.md) · [Structured results](validation/rfq_decision/example/decision.json)
