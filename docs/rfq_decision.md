@@ -16,7 +16,7 @@ result = assess_rfq(factory_data, snapshot, rfq_table, planner=planner, settings
 write_rfq_report(result, "rfq-output")
 ```
 
-Use the existing six FACTS tables and a one-row `Orders` table for the RFQ. Each order line is one job. `risk_settings` is optional. Workstation reliability columns and stochastic material DLTs are read from the existing factory inputs. Pass `InventoryRules` to retain a configured supplier selection or material dispatch policy. Custom policies and sampling functions should be reproducible under repeated calls with the same inputs.
+Use the existing six FACTS tables and a one-row `Orders` table for the RFQ. Each order line is one job. `risk_settings` is optional. Workstation reliability columns and stochastic material DLTs are read from the existing factory inputs. Pass `InventoryRules` to retain a configured supplier selection or material dispatch policy. Custom policies and sampling functions should be reproducible under repeated calls with the same inputs. [Factory tables and starting snapshot](simulation_reference.md#input-tables)
 
 ## Commitment and Pareto sensitivity
 

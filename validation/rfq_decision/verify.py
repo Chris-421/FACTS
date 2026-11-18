@@ -32,7 +32,9 @@ def preserve():
     for name, value in manifest["fixed_files"].items():
         assert digest(BASE / name) == value, name
     for name, prefix in manifest["report_prefixes"].items():
-        with (BASE / name).open("rb") as stream:
+        archive = prefix.get("archive")
+        source = gzip.open(BASE / archive, "rb") if archive else (BASE / name).open("rb")
+        with source as stream:
             assert sha256(stream.read(prefix["bytes"])).hexdigest() == prefix["sha256"], name
     return len(manifest["fixed_files"]), len(manifest["report_prefixes"])
 

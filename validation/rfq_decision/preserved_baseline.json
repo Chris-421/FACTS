@@ -240,7 +240,8 @@
   "report_prefixes": {
     "README.md": {
       "bytes": 10979,
-      "sha256": "81d87b77aaf562cec00d535d45ab73829ff241349cf80d239f388f7b321ef246"
+      "sha256": "81d87b77aaf562cec00d535d45ab73829ff241349cf80d239f388f7b321ef246",
+      "archive": "validation/rfq_decision/baseline_readme.txt.gz"
     },
     "validation/README.md": {
       "bytes": 11407,
