@@ -81,3 +81,7 @@ Use `Parameter(nominal, sampler)` to configure variable supplier lead time. Supp
 At a 25% target loss, 30 replications per case with seed `2026` produced 23.7% realized generic loss for 18-minute operations, 12.9% for 72-minute operations, and 10.5% for 90-minute operations. The longer operations gave the generator fewer eligible decision points. The validation command also varies workstation count, lot quantity, dispatch policy, and Pareto shape, and prints observed capacity, unused budgets, and target-order delivery distributions. These synthetic results measure the behavior of the proposed rule. Assessing delivery accuracy for a factory requires its own operating data.
 
 The existing `Factory_Model.xlsx` and prototype scripts use a legacy workbook layout. `load_workbook` expects the FACTS V0 sheets above.
+
+## Integrated RFQ decision support
+
+`facts.assess_rfq` uses the factory snapshot and planner efficiency probabilities to produce a recommended commitment, capped Pareto sensitivity, and a matched assessment of existing commitments. The report also identifies queue constraints and ranks explicit machine and supplier risks through paired controls. [Workflow and configuration](docs/rfq_decision.md) · [Synthetic report](validation/rfq_decision/example/decision.md)
