@@ -1,22 +1,29 @@
-# RFQ decision support
+# Assess an RFQ
 
-`facts.assess_rfq` evaluates one prospective order with one or more job lines against an existing factory snapshot. It returns a structured decision and separate trajectory tables. The simulator, scheduling rules, inventory events and routing are shared with `simulate`, `compare_rfq` and `monte_carlo`.
+Use `facts.assess_rfq` for one prospective order and its effect on the current backlog. Prepare the six factory tables, the starting snapshot, and a one-row `Orders` table for the RFQ. Each line is one job. [Factory tables and starting snapshot](simulation_reference.md#input-tables)
+
+Set the planner's efficiency estimates in `PlannerEfficiency` and the forecast horizon in `RFQSettings`. The horizon must follow both the snapshot and the RFQ release. Set an observation cutoff within that horizon for explicit risks, or use the forecast cutoff. Supply `InventoryRules` for a custom material dispatch or supplier selection policy.
+
+This example uses the same fixture as the repository quickstart. For your own factory, supply your factory data, snapshot, RFQ table, and any risk settings.
 
 ```python
+from examples.rfq_decision import HORIZON, decision_factory
 from facts import PlannerEfficiency, RFQSettings, assess_rfq, write_rfq_report
 
+data, initial, rfq, risk = decision_factory()
 planner = PlannerEfficiency(estimate=.75, certainty="medium", minimum=.65, maximum=.85)
 settings = RFQSettings(
-    until="2026-12-01 16:00",
+    until=HORIZON,
     seed=20261120,
     commitment_probability=.90,
     dispatch_cutoff="14:30",
+    practical_delay_minutes=45,
 )
-result = assess_rfq(factory_data, snapshot, rfq_table, planner=planner, settings=settings, risk=risk_settings)
-write_rfq_report(result, "rfq-output")
+decision = assess_rfq(data, initial, rfq, planner=planner, settings=settings, risk=risk)
+write_rfq_report(decision, "rfq-output")
 ```
 
-Use the existing six FACTS tables and a one-row `Orders` table for the RFQ. Each order line is one job. `risk_settings` is optional. Workstation reliability columns and stochastic material DLTs are read from the existing factory inputs. Pass `InventoryRules` to retain a configured supplier selection or material dispatch policy. Custom policies and sampling functions should be reproducible under repeated calls with the same inputs. [Factory tables and starting snapshot](simulation_reference.md#input-tables)
+Read `decision.md` for the commitment, sensitivity ranges, bottlenecks, risk rankings, and the expected impact on existing orders. `decision.json` contains the structured results. The compressed trajectory tables support a closer look at unfinished runs, resource waits, and matched comparisons.
 
 ## Commitment and Pareto sensitivity
 
@@ -29,8 +36,6 @@ The workflow reuses the same sampled planner efficiencies and station seed strea
 The baseline quote is the configured empirical quantile of central 80/20 production completion. Production completion is the maximum of the constituent job completion times when all jobs finish. Calendar and daily dispatch-cutoff rules find the earliest admissible working time on or after that quantile. With a cutoff, the quote describes modeled dispatch. Transportation time is outside the model. A result with an unidentified selected quantile or unavailable dispatch slot has no recommended commitment.
 
 Unfinished runs keep their mass. Quantile endpoints use each run's observed stop and the unknown upper completion bound. An unknown quantile, mean or standard deviation is represented by `null`. Completed-only moments and a lower bound for the mean remain available. Production on-time probability uses the requested timestamp inclusively and reports bounds if a run stops before the requested date. Confidence intervals use empirical binomial order statistics for percentiles and Wilson scores for probabilities. These intervals describe simulation sampling uncertainty.
-
-The public simulator keeps the legacy shift budget as its existing generic mode. Adopt the new option explicitly with `PoissonEfficiencySettings(.75)` in `simulate` or `monte_carlo`. `ParetoDowntime` can change the minimum, underlying concentration and cap. Historical V1 and V2 experiments are preserved in the validation workspace.
 
 ## Machine and supplier risks
 
@@ -48,11 +53,6 @@ The observer integrates queue and WIP over actual working time. Capacity wait re
 
 For each accepted central trajectory, a matched run starts from the same snapshot without the RFQ. Per-order changes include the signed completion difference, the difference of marginal P90 completion timestamps, the P90 of paired completion changes and on-time and miss-probability changes. The same practical-delay and probability thresholds flag existing orders. Raw pairs and probability bounds retain unfinished runs.
 
-## Reproduce the synthetic example
+## Validation
 
-```powershell
-.\.venv\Scripts\python.exe -m examples.rfq_decision
-.\.venv\Scripts\python.exe -m unittest discover -s tests -v
-```
-
-The example writes `decision.json`, a five-section `decision.md`, run metadata and compressed trace tables. The report includes the seed, planner settings and cutoff. The source revision and hashes are saved with the example. The implementation has synthetic validation for queues, stock gates, bypassed risks and interacting risks. Quoted delivery accuracy, the subjective certainty mapping and the downtime distribution still require empirical HMLV validation.
+Synthetic cases cover queue waits, material shortages, interacting risks, and delays to existing orders. The published example records the seed, planner settings, observation cutoff, and source revision. Quoted delivery accuracy, planner certainty weights, and the downtime assumptions still require evidence from real factories. [Validation report](../validation/rfq_decision/validation_report.md) · [Example decision](../validation/rfq_decision/example/decision.md)

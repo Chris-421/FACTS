@@ -1,6 +1,6 @@
-# Factory inputs and simulator reference
+# Factory inputs for RFQ assessment
 
-FACTS advances jobs through factory shifts and process queues while tracking stock, workstation availability, and order completion. The RFQ assessment uses the factory tables and snapshot below. [RFQ workflow and configuration](rfq_decision.md)
+FACTS uses the same factory and starting snapshot for the RFQ forecast and the paired checks of existing orders and operational risk. [Run the RFQ workflow](rfq_decision.md)
 
 ## Input tables
 
@@ -31,53 +31,17 @@ Stock is consumed at the start of the step that needs it. Shortages make that st
 
 FIFO ranks by arrival at the current process queue. EDD ranks by order due date. Ties use the shortest eligible operation including setup, then queue arrival, then the input order of jobs. Eligible stations rank by shortest total operation duration, with workstation input order deciding a tie. A lower-priority job can run when a higher-priority job does not fit. `priority_rules` accepts explicitly configured `fifo_basis`, `backfill`, `job_tiebreak`, or `station_selection` overrides. The last two accept `'id'` or a rank function in Python.
 
-## Simulator API
+## Efficiency in the RFQ forecast
 
-```python
-from examples.synthetic import example_factory
-from facts import compare_rfq, monte_carlo, simulate
+FACTS samples one efficiency per trajectory from the planner's estimate and bounds or explicit weights. At the end of a productive operation, including setup, it draws a Poisson count and sums that many independent capped Pareto downtimes. Each draw lasts 1–480 working minutes. The combined outage can exceed 480 minutes and its clock pauses during factory closures.
 
-data, initial, rfq = example_factory()
-baseline = simulate(data, initial)
-comparison = compare_rfq(data, initial, rfq)
-forecast = monte_carlo(
-    data, initial, rfq=rfq, compare=True, seed=2026,
-    runs={0.80: 20, 0.90: 50}, planner_weights={0.80: 0.25, 0.90: 0.75},
-)
-print(comparison.existing_orders)
-print(forecast.weighted_summary)
-```
+The central 80/20 case supplies the production completion forecast and commitment, while 70/30 and 90/10 measure sensitivity. FACTS calibrates the Poisson rate using the mean of each capped distribution. The quotation runs use nominal supplier lead times. [Forecast, commitment, and sensitivity](rfq_decision.md#commitment-and-pareto-sensitivity)
 
-`simulate` returns initial and final snapshots (`F`, `J`, `S`, `Inv`), job and order results, station and station-shift metrics, an event log, sampled inputs, and run diagnostics. `compare_rfq` provides differences in completion, tardiness, waiting time, and workstation occupancy. Results distinguish `complete`, `blocked`, `infeasible`, and `limit_reached`. `RunLimits` accepts a timestamp cutoff and an event limit, which defaults to 20,000. Waiting time measures the portion observed from the snapshot onward.
+## Machine and supplier risk inputs
 
-### Efficiency forecast
+The operational-risk analysis ranks machine and supplier effects from matched runs. It uses the forecast horizon as the observation cutoff unless you supply a cutoff through `RiskSettings`.
 
-Supply either a point estimate as `efficiency_levels=0.90`, a grid of conditional scenarios, or planner weights as a mapping or an `Efficiency_Beliefs` DataFrame with `efficiency_level` and `probability_weight`. A weighted forecast combines sample mass across levels before computing dates and percentiles. Incomplete runs retain their probability mass. Where completion or on-time performance is undetermined, the summary reports identifiable quantiles and on-time bounds. The spread is P95 minus P05.
+- **Machines.** Provide `tbf`, `ttr`, and `initial_tbf_remaining` in `Workstations`, or supply a `MachineReliability(tbf, ttr, initial_tbf_remaining)` for each relevant workstation in `RiskSettings`. Supply fixed values or functions that take a NumPy random generator. The failure clock runs during productive operations, including setup. Failures take effect after the running operation finishes. Repairs then advance on the calendar.
+- **Suppliers.** Use `Parameter(nominal, sampler)` for variable lead time in the `Materials` table. Use `InventoryRules(sample_otp=True)` to sample a configured purchase-order interval in the operational-risk analysis. For materials with multiple suppliers, supply the selection policy through `InventoryRules`.
 
-`EfficiencySettings` configures the Pareto minimum, shape, and optional sampler. The capped loss can be shorter than the minimum. For a run that begins partway through a shift, supply the remaining loss budget by station with `initial_remaining` or provide a callable. Realized downtime, unused budget, idle time, and processing utilization are reported separately.
-
-### Operational risk
-
-Pass `risk=RiskSettings(observation_end, reliability)` to `simulate` or `monte_carlo`. For each modeled machine, provide a `MachineReliability(tbf, ttr, initial_tbf_remaining)` or columns `tbf`, `ttr`, and `initial_tbf_remaining` in the station table. Each value can be fixed or sampled from an explicitly supplied `numpy.random.Generator` callable. The failure clock runs only during operations, including setup. A failure that falls during an operation begins at completion. Repair time then advances on the calendar.
-
-Use `Parameter(nominal, sampler)` to configure variable supplier lead time. Supply `InventoryRules(sample_otp=True)` to enable a configured placement-interval sampler in the risk run. Other modes use nominal purchasing terms. Baseline and RFQ Monte Carlo pairs use common per-entity random streams. A change in workload can move the calendar time of the same operating-time failure threshold.
-
-`analyze_risk(experiment, order_id)` reports Pearson and Spearman correlations and regression diagnostics for the selected order's completion, tardiness, or waiting time. The default machine predictors use draws within a common reference budget of scheduled operating minutes. Set `machine_exposure='realized'` or `'both'` to inspect actual outages within the fixed calendar window. Realized outages depend on which work reaches a station. Supplier predictors use purchases placed within the fixed observation window, including purchases made after production finished. Those extra draws and events are marked `after_production`, and the final factory snapshot stays at production end. These associations depend on the chosen observation window and are sensitive to censored outcomes.
-
-## Historical simulator checks
-
-At a 25% target loss, 30 replications per case with seed `2026` produced 23.7% realized generic loss for 18-minute operations, 12.9% for 72-minute operations, and 10.5% for 90-minute operations. The longer operations gave the generator fewer eligible decision points. The validation command also varies workstation count, lot quantity, dispatch policy, and Pareto shape, and prints observed capacity, unused budgets, and target-order delivery distributions. These synthetic results describe the shift-budget model. Assessing delivery accuracy for a factory requires its own operating data.
-
-The existing `Factory_Model.xlsx` and prototype scripts use a legacy workbook layout. `load_workbook` expects the FACTS V0 sheets above.
-
-## Simulator examples
-
-Run these commands from the repository root.
-
-```powershell
-.\.venv\Scripts\python.exe -m examples.synthetic
-.\.venv\Scripts\python.exe -m examples.efficiency_validation --runs 30 --seed 2026
-.\.venv\Scripts\python.exe -m unittest discover -s tests -v
-```
-
-`examples.synthetic` exercises all three simulator modes. Its deterministic RFQ completes on 16 November 2026 at 11:30 and delays the existing order by 90 minutes.
+[Read the machine and supplier risk findings](rfq_decision.md#machine-and-supplier-risks)
