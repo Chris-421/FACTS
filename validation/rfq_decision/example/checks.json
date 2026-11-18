@@ -1,0 +1,46 @@
+{
+  "implementation_commit": "8bef29f604b56b30e875b6b90f68b58e904e590e",
+  "example_seed": 20261120,
+  "forecast_outcomes": 6000,
+  "rfq_jobs_checked": 12000,
+  "existing_order_pairs_checked": 8000,
+  "unaffected_order_exact_pairs": 2000,
+  "entity_control_pairs_checked": 1500,
+  "operational_full_runs": 500,
+  "double_control_pairs_checked": 1500,
+  "historical_files_verified": 234,
+  "document_prefixes_verified": 3,
+  "p90_prefix_comparison": {
+    "80/20": {
+      "500": "2026-11-16T12:45:02.732117378",
+      "1000": "2026-11-16T12:45:28.376330019",
+      "2000": "2026-11-16T12:45:52.314058716"
+    },
+    "70/30": {
+      "500": "2026-11-16T12:43:52.728625771",
+      "1000": "2026-11-16T12:42:25.457888759",
+      "2000": "2026-11-16T12:43:52.728625771"
+    },
+    "90/10": {
+      "500": "2026-11-16T12:45:03.685914172",
+      "1000": "2026-11-16T12:50:07.122917021",
+      "2000": "2026-11-16T12:52:14.399165719"
+    }
+  },
+  "trace_sha256": {
+    "capacity_paths.jsonl.gz": "b14a166332aa81299751ce9e2d0cb76d41097d8bd043337c037fe53d65463962",
+    "efficiency_outcomes.jsonl.gz": "b722dcf2b80a89faf55234f3746f0084a72406bc3311bccc0983f34b6f3fcee0",
+    "existing_order_pairs.jsonl.gz": "a12a880b9fc90fc6138913171c29c2086f6b7a81452d6299385b7936c490d977",
+    "interaction_effects.jsonl.gz": "b6416bcf1329298c2026fd85313ab8ca19b0b6b88cb794a30811cc94d955ef62",
+    "machine_episodes.jsonl.gz": "8a1e4dafe85e3bfe82509903b3b115c0a6ac3bab05f5787e73728e504d9c5fea",
+    "machine_exposures.jsonl.gz": "72e29c1ec28f3b09ff434d26f94ec2e514feeedb43fe108516adeb44fd5b1fff",
+    "machine_samples.jsonl.gz": "a48cbf163656331a4b3e51c144830216b3c55fab0f3fcc7696bb977ef941a4b2",
+    "material_requirements.jsonl.gz": "db1ee4977616d94bd1102aa641772d02d6b96c10ac57f3f4fd5a93a49a484a92",
+    "operations.jsonl.gz": "bad1de240cfb62c617461be04ca9db297bff492ee753f142a8384f899c5ae4b4",
+    "rfq_jobs.jsonl.gz": "1729661aa3df24130bc28f96543d86b8c8f5781ba13098d5bcc6ad3abd44363a",
+    "risk_outcomes.jsonl.gz": "55367c1537a286edb0ccd769632f205e6f28ae6fe86e1bba4bf68417e8d2af38",
+    "risk_pairs.jsonl.gz": "9b5ed76446303507eaaca7e3571b1455fe1f44e5d924ac4895282edea2a3fc03",
+    "supplier_deliveries.jsonl.gz": "17ec43f0b4f76b435bbe5962ce930e10b908349cba503bd8d11c01e9a60ed677",
+    "supplier_exposures.jsonl.gz": "6fe33f81153b6df17845f80666cacc41c14a2c6289b513047b708426b37d2a80"
+  }
+}

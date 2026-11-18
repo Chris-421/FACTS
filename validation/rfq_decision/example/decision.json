@@ -1,0 +1,1582 @@
+{
+  "schema_version": 1,
+  "rfq_id": "RFQ-21",
+  "released_at": "2026-11-16T08:20:00",
+  "settings": {
+    "until": "2026-11-24T16:00:00",
+    "runs": 2000,
+    "risk_runs": 500,
+    "seed": 20261120,
+    "commitment_probability": 0.9,
+    "dispatch_cutoff": "14:30",
+    "idle_policy": "immediate",
+    "practical_delay_minutes": 45.0,
+    "critical_probability": 0.2,
+    "min_complete_pairs": 30,
+    "min_complete_fraction": 0.8,
+    "max_interaction_pairs": 3,
+    "max_events": 20000
+  },
+  "planner": {
+    "estimate": 0.75,
+    "certainty": "medium",
+    "minimum": 0.65,
+    "maximum": 0.85,
+    "half_weight_pp": {
+      "low": 8.0,
+      "medium": 4.0,
+      "high": 2.0
+    }
+  },
+  "efficiency_probabilities": [
+    {
+      "efficiency": 0.65,
+      "probability": 0.0015458818726424867
+    },
+    {
+      "efficiency": 0.66,
+      "probability": 0.003520865414483311
+    },
+    {
+      "efficiency": 0.67,
+      "probability": 0.0073534948876007025
+    },
+    {
+      "efficiency": 0.68,
+      "probability": 0.014083461657933245
+    },
+    {
+      "efficiency": 0.69,
+      "probability": 0.024734109962279788
+    },
+    {
+      "efficiency": 0.7,
+      "probability": 0.039834044963621335
+    },
+    {
+      "efficiency": 0.71,
+      "probability": 0.05882795910080562
+    },
+    {
+      "efficiency": 0.72,
+      "probability": 0.07966808992724267
+    },
+    {
+      "efficiency": 0.73,
+      "probability": 0.09893643984911915
+    },
+    {
+      "efficiency": 0.74,
+      "probability": 0.11266769326346596
+    },
+    {
+      "efficiency": 0.75,
+      "probability": 0.11765591820161124
+    },
+    {
+      "efficiency": 0.76,
+      "probability": 0.11266769326346596
+    },
+    {
+      "efficiency": 0.77,
+      "probability": 0.09893643984911915
+    },
+    {
+      "efficiency": 0.78,
+      "probability": 0.07966808992724267
+    },
+    {
+      "efficiency": 0.79,
+      "probability": 0.05882795910080562
+    },
+    {
+      "efficiency": 0.8,
+      "probability": 0.039834044963621335
+    },
+    {
+      "efficiency": 0.81,
+      "probability": 0.024734109962279788
+    },
+    {
+      "efficiency": 0.82,
+      "probability": 0.014083461657933245
+    },
+    {
+      "efficiency": 0.83,
+      "probability": 0.0073534948876007025
+    },
+    {
+      "efficiency": 0.84,
+      "probability": 0.003520865414483311
+    },
+    {
+      "efficiency": 0.85,
+      "probability": 0.0015458818726424867
+    }
+  ],
+  "sampled_efficiencies": [
+    {
+      "efficiency": 0.65,
+      "count": 1
+    },
+    {
+      "efficiency": 0.66,
+      "count": 8
+    },
+    {
+      "efficiency": 0.67,
+      "count": 15
+    },
+    {
+      "efficiency": 0.68,
+      "count": 23
+    },
+    {
+      "efficiency": 0.69,
+      "count": 41
+    },
+    {
+      "efficiency": 0.7,
+      "count": 109
+    },
+    {
+      "efficiency": 0.71,
+      "count": 105
+    },
+    {
+      "efficiency": 0.72,
+      "count": 141
+    },
+    {
+      "efficiency": 0.73,
+      "count": 202
+    },
+    {
+      "efficiency": 0.74,
+      "count": 233
+    },
+    {
+      "efficiency": 0.75,
+      "count": 225
+    },
+    {
+      "efficiency": 0.76,
+      "count": 235
+    },
+    {
+      "efficiency": 0.77,
+      "count": 197
+    },
+    {
+      "efficiency": 0.78,
+      "count": 166
+    },
+    {
+      "efficiency": 0.79,
+      "count": 92
+    },
+    {
+      "efficiency": 0.8,
+      "count": 95
+    },
+    {
+      "efficiency": 0.81,
+      "count": 55
+    },
+    {
+      "efficiency": 0.82,
+      "count": 28
+    },
+    {
+      "efficiency": 0.83,
+      "count": 16
+    },
+    {
+      "efficiency": 0.84,
+      "count": 9
+    },
+    {
+      "efficiency": 0.85,
+      "count": 4
+    }
+  ],
+  "commitment": {
+    "production_quantile": {
+      "date": "2026-11-16T12:45:52.314058716",
+      "earliest": "2026-11-16T12:45:52.314058716",
+      "latest": "2026-11-16T12:45:52.314058716",
+      "mc_interval": [
+        "2026-11-16T12:41:14.999443439",
+        "2026-11-16T12:50:45.287421638"
+      ]
+    },
+    "recommended_production_completion": "2026-11-16T12:45:52.314058716",
+    "recommended_commitment": "2026-11-16T12:45:52.314058716",
+    "commitment_basis": "modeled dispatch",
+    "threshold": 0.9,
+    "transportation_modeled": false,
+    "customer_requested_date": "2026-11-16T15:00:00",
+    "forecast": {
+      "runs": 2000,
+      "completed": 2000,
+      "censored": 0,
+      "mean_completion": "2026-11-16T12:35:57.411740038",
+      "std_minutes": 172.89917290311126,
+      "completed_only_mean": "2026-11-16T12:35:57.411740038",
+      "completed_only_std_minutes": 172.89917290311126,
+      "mean_completion_lower_bound": "2026-11-16T12:35:57.411740038",
+      "quantiles": {
+        "p50": {
+          "date": "2026-11-16T12:06:23.859554237",
+          "earliest": "2026-11-16T12:06:23.859554237",
+          "latest": "2026-11-16T12:06:23.859554237",
+          "mc_interval": [
+            "2026-11-16T12:05:33.778530950",
+            "2026-11-16T12:07:19.747341549"
+          ]
+        },
+        "p80": {
+          "date": "2026-11-16T12:26:53.652811617",
+          "earliest": "2026-11-16T12:26:53.652811617",
+          "latest": "2026-11-16T12:26:53.652811617",
+          "mc_interval": [
+            "2026-11-16T12:24:40.032430157",
+            "2026-11-16T12:29:40.759925670"
+          ]
+        },
+        "p90": {
+          "date": "2026-11-16T12:45:52.314058716",
+          "earliest": "2026-11-16T12:45:52.314058716",
+          "latest": "2026-11-16T12:45:52.314058716",
+          "mc_interval": [
+            "2026-11-16T12:41:14.999443439",
+            "2026-11-16T12:50:45.287421638"
+          ]
+        },
+        "p95": {
+          "date": "2026-11-16T13:14:44.273892148",
+          "earliest": "2026-11-16T13:14:44.273892148",
+          "latest": "2026-11-16T13:14:44.273892148",
+          "mc_interval": [
+            "2026-11-16T13:07:30.364935668",
+            "2026-11-16T13:36:32.032308753"
+          ]
+        }
+      },
+      "on_time": {
+        "estimate": 0.981,
+        "lower": 0.981,
+        "upper": 0.981,
+        "mc95": [
+          0.974029585433736,
+          0.9861262150816985
+        ]
+      }
+    },
+    "dispatch_on_time": {
+      "estimate": 0.9775,
+      "lower": 0.9775,
+      "upper": 0.9775,
+      "mc95": [
+        0.9700270953304039,
+        0.9831421245159996
+      ]
+    }
+  },
+  "pareto_sensitivity": {
+    "central": "80/20",
+    "assumptions": {
+      "80/20": {
+        "shape": 1.160964047443681,
+        "underlying_top_20_share": 0.8,
+        "minimum_minutes": 1.0,
+        "elementary_cap_minutes": 480.0,
+        "expected_elementary_minutes": 4.912780122902313,
+        "forecast": {
+          "runs": 2000,
+          "completed": 2000,
+          "censored": 0,
+          "mean_completion": "2026-11-16T12:35:57.411740038",
+          "std_minutes": 172.89917290311126,
+          "completed_only_mean": "2026-11-16T12:35:57.411740038",
+          "completed_only_std_minutes": 172.89917290311126,
+          "mean_completion_lower_bound": "2026-11-16T12:35:57.411740038",
+          "quantiles": {
+            "p50": {
+              "date": "2026-11-16T12:06:23.859554237",
+              "earliest": "2026-11-16T12:06:23.859554237",
+              "latest": "2026-11-16T12:06:23.859554237",
+              "mc_interval": [
+                "2026-11-16T12:05:33.778530950",
+                "2026-11-16T12:07:19.747341549"
+              ]
+            },
+            "p80": {
+              "date": "2026-11-16T12:26:53.652811617",
+              "earliest": "2026-11-16T12:26:53.652811617",
+              "latest": "2026-11-16T12:26:53.652811617",
+              "mc_interval": [
+                "2026-11-16T12:24:40.032430157",
+                "2026-11-16T12:29:40.759925670"
+              ]
+            },
+            "p90": {
+              "date": "2026-11-16T12:45:52.314058716",
+              "earliest": "2026-11-16T12:45:52.314058716",
+              "latest": "2026-11-16T12:45:52.314058716",
+              "mc_interval": [
+                "2026-11-16T12:41:14.999443439",
+                "2026-11-16T12:50:45.287421638"
+              ]
+            },
+            "p95": {
+              "date": "2026-11-16T13:14:44.273892148",
+              "earliest": "2026-11-16T13:14:44.273892148",
+              "latest": "2026-11-16T13:14:44.273892148",
+              "mc_interval": [
+                "2026-11-16T13:07:30.364935668",
+                "2026-11-16T13:36:32.032308753"
+              ]
+            }
+          },
+          "on_time": {
+            "estimate": 0.981,
+            "lower": 0.981,
+            "upper": 0.981,
+            "mc95": [
+              0.974029585433736,
+              0.9861262150816985
+            ]
+          }
+        }
+      },
+      "70/30": {
+        "shape": 1.2847106379326627,
+        "underlying_top_20_share": 0.7,
+        "minimum_minutes": 1.0,
+        "elementary_cap_minutes": 480.0,
+        "expected_elementary_minutes": 3.9066926546597704,
+        "forecast": {
+          "runs": 2000,
+          "completed": 2000,
+          "censored": 0,
+          "mean_completion": "2026-11-16T12:26:19.072500818",
+          "std_minutes": 118.88402520297846,
+          "completed_only_mean": "2026-11-16T12:26:19.072500818",
+          "completed_only_std_minutes": 118.88402520297846,
+          "mean_completion_lower_bound": "2026-11-16T12:26:19.072500818",
+          "quantiles": {
+            "p50": {
+              "date": "2026-11-16T12:09:12.734969362",
+              "earliest": "2026-11-16T12:09:12.734969362",
+              "latest": "2026-11-16T12:09:12.734969362",
+              "mc_interval": [
+                "2026-11-16T12:08:15.305189460",
+                "2026-11-16T12:09:59.448640094"
+              ]
+            },
+            "p80": {
+              "date": "2026-11-16T12:26:26.090803198",
+              "earliest": "2026-11-16T12:26:26.090803198",
+              "latest": "2026-11-16T12:26:26.090803198",
+              "mc_interval": [
+                "2026-11-16T12:24:28.453613006",
+                "2026-11-16T12:28:37.744878841"
+              ]
+            },
+            "p90": {
+              "date": "2026-11-16T12:43:52.728625771",
+              "earliest": "2026-11-16T12:43:52.728625771",
+              "latest": "2026-11-16T12:43:52.728625771",
+              "mc_interval": [
+                "2026-11-16T12:40:25.148934988",
+                "2026-11-16T12:48:46.052541112"
+              ]
+            },
+            "p95": {
+              "date": "2026-11-16T13:13:45.246677565",
+              "earliest": "2026-11-16T13:13:45.246677565",
+              "latest": "2026-11-16T13:13:45.246677565",
+              "mc_interval": [
+                "2026-11-16T13:03:10.341028858",
+                "2026-11-16T13:23:08.980792022"
+              ]
+            }
+          },
+          "on_time": {
+            "estimate": 0.9885,
+            "lower": 0.9885,
+            "upper": 0.9885,
+            "mc95": [
+              0.9828022720924287,
+              0.9923247727137873
+            ]
+          }
+        }
+      },
+      "90/10": {
+        "shape": 1.0700499295339776,
+        "underlying_top_20_share": 0.9,
+        "minimum_minutes": 1.0,
+        "elementary_cap_minutes": 480.0,
+        "expected_elementary_minutes": 6.012107960182345,
+        "forecast": {
+          "runs": 2000,
+          "completed": 2000,
+          "censored": 0,
+          "mean_completion": "2026-11-16T12:41:50.923919549",
+          "std_minutes": 196.97969523057907,
+          "completed_only_mean": "2026-11-16T12:41:50.923919549",
+          "completed_only_std_minutes": 196.97969523057907,
+          "mean_completion_lower_bound": "2026-11-16T12:41:50.923919549",
+          "quantiles": {
+            "p50": {
+              "date": "2026-11-16T12:04:21.159512876",
+              "earliest": "2026-11-16T12:04:21.159512876",
+              "latest": "2026-11-16T12:04:21.159512876",
+              "mc_interval": [
+                "2026-11-16T12:03:26.860465577",
+                "2026-11-16T12:05:26.136003951"
+              ]
+            },
+            "p80": {
+              "date": "2026-11-16T12:28:50.644565025",
+              "earliest": "2026-11-16T12:28:50.644565025",
+              "latest": "2026-11-16T12:28:50.644565025",
+              "mc_interval": [
+                "2026-11-16T12:26:04.883569884",
+                "2026-11-16T12:31:29.215280542"
+              ]
+            },
+            "p90": {
+              "date": "2026-11-16T12:52:14.399165719",
+              "earliest": "2026-11-16T12:52:14.399165719",
+              "latest": "2026-11-16T12:52:14.399165719",
+              "mc_interval": [
+                "2026-11-16T12:47:37.915209153",
+                "2026-11-16T12:59:10.115310049"
+              ]
+            },
+            "p95": {
+              "date": "2026-11-16T13:34:16.824580677",
+              "earliest": "2026-11-16T13:34:16.824580677",
+              "latest": "2026-11-16T13:34:16.824580677",
+              "mc_interval": [
+                "2026-11-16T13:19:57.346656504",
+                "2026-11-16T13:59:16.111496341"
+              ]
+            }
+          },
+          "on_time": {
+            "estimate": 0.973,
+            "lower": 0.973,
+            "upper": 0.973,
+            "mc95": [
+              0.9649388695134226,
+              0.9792476037585119
+            ]
+          }
+        }
+      }
+    },
+    "ranges": {
+      "p50": {
+        "lower": "2026-11-16T12:04:21.159512876",
+        "upper": "2026-11-16T12:09:12.734969362"
+      },
+      "p80": {
+        "lower": "2026-11-16T12:26:26.090803198",
+        "upper": "2026-11-16T12:28:50.644565025"
+      },
+      "p90": {
+        "lower": "2026-11-16T12:43:52.728625771",
+        "upper": "2026-11-16T12:52:14.399165719"
+      },
+      "p95": {
+        "lower": "2026-11-16T13:13:45.246677565",
+        "upper": "2026-11-16T13:34:16.824580677"
+      },
+      "on_time": {
+        "lower": 0.973,
+        "upper": 0.9885,
+        "all_shapes_identified": true
+      }
+    }
+  },
+  "capacity": {
+    "resources": [
+      {
+        "resource_type": "station",
+        "resource": "Mill A",
+        "group": "milling",
+        "mean_queue_job_minutes": 328.0315575316106,
+        "mean_wip_job_minutes": 543.0315575316106,
+        "mean_peak_wip": 3.0,
+        "mean_peak_queue": 2.1785,
+        "mean_capacity_wait_job_minutes": 325.8115575316106,
+        "mean_rfq_queue_minutes": 46.4611069670955,
+        "mean_rfq_capacity_wait_minutes": 46.26610696709551,
+        "mean_rfq_material_wait_minutes": 0.0,
+        "mean_rfq_shift_fit_wait_minutes": 0.195,
+        "mean_rfq_dispatch_wait_minutes": 0.0,
+        "mean_scheduled_shift_time": 567.6,
+        "mean_observed_shift_time": 449.1981812410897,
+        "mean_processing_time": 215.0,
+        "mean_completed_operations": 4.0,
+        "mean_generic_unavailability_time": 72.40042393162727,
+        "mean_machine_downtime": 0.0,
+        "mean_initial_downtime": 0.0,
+        "mean_idle_no_work": 161.5027860718611,
+        "mean_idle_shift_constraint": 0.29497123760139166,
+        "mean_idle_material": 0.0,
+        "mean_idle_dispatch": 0.0,
+        "processing_utilization": 0.4786306111168493,
+        "mean_queue_length": 0.7302602085905427,
+        "mean_wip": 1.208890819707392,
+        "max_sampled_queue": 3,
+        "max_sampled_wip": 3,
+        "mean_unavailable_minutes": 72.40042393162727,
+        "mean_idle_minutes": 161.7977573094625
+      },
+      {
+        "resource_type": "station",
+        "resource": "Booth B",
+        "group": "finishing",
+        "mean_queue_job_minutes": 261.20694624040004,
+        "mean_wip_job_minutes": 586.2069462404,
+        "mean_peak_wip": 2.4235,
+        "mean_peak_queue": 1.79,
+        "mean_capacity_wait_job_minutes": 248.9523251943584,
+        "mean_rfq_queue_minutes": 24.135755366875667,
+        "mean_rfq_capacity_wait_minutes": 22.914330723680116,
+        "mean_rfq_material_wait_minutes": 0.0,
+        "mean_rfq_shift_fit_wait_minutes": 1.2214246431955498,
+        "mean_rfq_dispatch_wait_minutes": 0.0,
+        "mean_scheduled_shift_time": 567.6,
+        "mean_observed_shift_time": 449.1981812410897,
+        "mean_processing_time": 325.0,
+        "mean_completed_operations": 5.0,
+        "mean_generic_unavailability_time": 86.42403146808651,
+        "mean_machine_downtime": 0.0,
+        "mean_initial_downtime": 0.0,
+        "mean_idle_no_work": 33.952713525963226,
+        "mean_idle_shift_constraint": 3.8214362470400163,
+        "mean_idle_material": 0.0,
+        "mean_idle_dispatch": 0.0,
+        "processing_utilization": 0.723511388897563,
+        "mean_queue_length": 0.5814960014279473,
+        "mean_wip": 1.3050073903255104,
+        "max_sampled_queue": 4,
+        "max_sampled_wip": 4,
+        "mean_unavailable_minutes": 86.42403146808651,
+        "mean_idle_minutes": 37.774149773003245
+      },
+      {
+        "resource_type": "station",
+        "resource": "Punch C",
+        "group": "punching",
+        "mean_queue_job_minutes": 403.22008806435355,
+        "mean_wip_job_minutes": 523.2200880643536,
+        "mean_peak_wip": 6.0,
+        "mean_peak_queue": 5.0,
+        "mean_capacity_wait_job_minutes": 402.70008806435357,
+        "mean_rfq_queue_minutes": 0.0,
+        "mean_rfq_capacity_wait_minutes": 0.0,
+        "mean_rfq_material_wait_minutes": 0.0,
+        "mean_rfq_shift_fit_wait_minutes": 0.0,
+        "mean_rfq_dispatch_wait_minutes": 0.0,
+        "mean_scheduled_shift_time": 567.6,
+        "mean_observed_shift_time": 449.1981812410897,
+        "mean_processing_time": 120.0,
+        "mean_completed_operations": 6.0,
+        "mean_generic_unavailability_time": 41.06057351975069,
+        "mean_machine_downtime": 0.0,
+        "mean_initial_downtime": 0.0,
+        "mean_idle_no_work": 288.12214361020176,
+        "mean_idle_shift_constraint": 0.015464111137275001,
+        "mean_idle_material": 0.0,
+        "mean_idle_dispatch": 0.0,
+        "processing_utilization": 0.26714266666986936,
+        "mean_queue_length": 0.8976440798364248,
+        "mean_wip": 1.1647867465062942,
+        "max_sampled_queue": 5,
+        "max_sampled_wip": 6,
+        "mean_unavailable_minutes": 41.06057351975069,
+        "mean_idle_minutes": 288.137607721339
+      },
+      {
+        "resource_type": "group",
+        "resource": "milling",
+        "group": "milling",
+        "mean_queue_job_minutes": 328.0315575316106,
+        "mean_wip_job_minutes": 543.0315575316106,
+        "mean_peak_wip": 3.0,
+        "mean_peak_queue": 2.1785,
+        "mean_capacity_wait_job_minutes": 325.8115575316106,
+        "mean_rfq_queue_minutes": 46.4611069670955,
+        "mean_rfq_capacity_wait_minutes": 46.26610696709551,
+        "mean_rfq_material_wait_minutes": 0.0,
+        "mean_rfq_shift_fit_wait_minutes": 0.195,
+        "mean_rfq_dispatch_wait_minutes": 0.0,
+        "mean_scheduled_shift_time": 567.6,
+        "mean_observed_shift_time": 449.1981812410897,
+        "mean_processing_time": 215.0,
+        "mean_completed_operations": 4.0,
+        "mean_generic_unavailability_time": 72.40042393162727,
+        "mean_machine_downtime": 0.0,
+        "mean_initial_downtime": 0.0,
+        "mean_idle_no_work": 161.5027860718611,
+        "mean_idle_shift_constraint": 0.29497123760139166,
+        "mean_idle_material": 0.0,
+        "mean_idle_dispatch": 0.0,
+        "processing_utilization": 0.4786306111168493,
+        "mean_queue_length": 0.7302602085905427,
+        "mean_wip": 1.208890819707392,
+        "max_sampled_queue": 3,
+        "max_sampled_wip": 3,
+        "mean_unavailable_minutes": 72.40042393162727,
+        "mean_idle_minutes": 161.7977573094625
+      },
+      {
+        "resource_type": "group",
+        "resource": "finishing",
+        "group": "finishing",
+        "mean_queue_job_minutes": 261.20694624040004,
+        "mean_wip_job_minutes": 586.2069462404,
+        "mean_peak_wip": 2.4235,
+        "mean_peak_queue": 1.79,
+        "mean_capacity_wait_job_minutes": 248.9523251943584,
+        "mean_rfq_queue_minutes": 24.135755366875667,
+        "mean_rfq_capacity_wait_minutes": 22.914330723680116,
+        "mean_rfq_material_wait_minutes": 0.0,
+        "mean_rfq_shift_fit_wait_minutes": 1.2214246431955498,
+        "mean_rfq_dispatch_wait_minutes": 0.0,
+        "mean_scheduled_shift_time": 567.6,
+        "mean_observed_shift_time": 449.1981812410897,
+        "mean_processing_time": 325.0,
+        "mean_completed_operations": 5.0,
+        "mean_generic_unavailability_time": 86.42403146808651,
+        "mean_machine_downtime": 0.0,
+        "mean_initial_downtime": 0.0,
+        "mean_idle_no_work": 33.952713525963226,
+        "mean_idle_shift_constraint": 3.8214362470400163,
+        "mean_idle_material": 0.0,
+        "mean_idle_dispatch": 0.0,
+        "processing_utilization": 0.723511388897563,
+        "mean_queue_length": 0.5814960014279473,
+        "mean_wip": 1.3050073903255104,
+        "max_sampled_queue": 4,
+        "max_sampled_wip": 4,
+        "mean_unavailable_minutes": 86.42403146808651,
+        "mean_idle_minutes": 37.774149773003245
+      },
+      {
+        "resource_type": "group",
+        "resource": "punching",
+        "group": "punching",
+        "mean_queue_job_minutes": 403.22008806435355,
+        "mean_wip_job_minutes": 523.2200880643536,
+        "mean_peak_wip": 6.0,
+        "mean_peak_queue": 5.0,
+        "mean_capacity_wait_job_minutes": 402.70008806435357,
+        "mean_rfq_queue_minutes": 0.0,
+        "mean_rfq_capacity_wait_minutes": 0.0,
+        "mean_rfq_material_wait_minutes": 0.0,
+        "mean_rfq_shift_fit_wait_minutes": 0.0,
+        "mean_rfq_dispatch_wait_minutes": 0.0,
+        "mean_scheduled_shift_time": 567.6,
+        "mean_observed_shift_time": 449.1981812410897,
+        "mean_processing_time": 120.0,
+        "mean_completed_operations": 6.0,
+        "mean_generic_unavailability_time": 41.06057351975069,
+        "mean_machine_downtime": 0.0,
+        "mean_initial_downtime": 0.0,
+        "mean_idle_no_work": 288.12214361020176,
+        "mean_idle_shift_constraint": 0.015464111137275001,
+        "mean_idle_material": 0.0,
+        "mean_idle_dispatch": 0.0,
+        "processing_utilization": 0.26714266666986936,
+        "mean_queue_length": 0.8976440798364248,
+        "mean_wip": 1.1647867465062942,
+        "max_sampled_queue": 5,
+        "max_sampled_wip": 6,
+        "mean_unavailable_minutes": 41.06057351975069,
+        "mean_idle_minutes": 288.137607721339
+      }
+    ],
+    "main_factory_constraint": "punching",
+    "main_rfq_constraint": "milling"
+  },
+  "operational_risk": {
+    "reference": {
+      "completion": "2026-11-16T11:45:00",
+      "lead_minutes": 205.0,
+      "status": "complete"
+    },
+    "modeled": true,
+    "rankings": [
+      {
+        "type": "supply",
+        "entity": [
+          "alloy",
+          "Metals Co"
+        ],
+        "label": "critical supplier",
+        "runs": 500,
+        "complete_pairs": 500,
+        "censored_pairs": 0,
+        "mean_minutes": 428.27871533127427,
+        "mean_complete_pairs_minutes": 428.27871533127427,
+        "mean_complete_pairs_mc95": [
+          379.770068632109,
+          476.78736203043957
+        ],
+        "median_minutes": {
+          "estimate": 120.0,
+          "lower": 120.0,
+          "upper": 120.0,
+          "mc95": [
+            60.0,
+            120.0
+          ]
+        },
+        "p90_minutes": {
+          "estimate": 1274.6032586850333,
+          "lower": 1274.6032586850333,
+          "upper": 1274.6032586850333,
+          "mc95": [
+            1267.9503598441834,
+            1282.5099698708834
+          ]
+        },
+        "positive": {
+          "estimate": 0.724,
+          "lower": 0.724,
+          "upper": 0.724,
+          "mc95": [
+            0.6832224284166226,
+            0.761361867056602
+          ]
+        },
+        "material": {
+          "estimate": 0.724,
+          "lower": 0.724,
+          "upper": 0.724,
+          "mc95": [
+            0.6832224284166226,
+            0.761361867056602
+          ]
+        },
+        "exposures": {
+          "mean_dlt_minutes": {
+            "n": 500,
+            "mean": 251.0420416989262,
+            "median": 250.25656009121883,
+            "p90": 379.6220845213446,
+            "max": 411.7598461038118
+          },
+          "delivery_count": {
+            "n": 500,
+            "mean": 1.0,
+            "median": 1.0,
+            "p90": 1.0,
+            "max": 1.0
+          },
+          "total_dlt_deviation_minutes": {
+            "n": 500,
+            "mean": 156.0420416989262,
+            "median": 155.25656009121883,
+            "p90": 284.6220845213446,
+            "max": 316.7598461038118
+          },
+          "arrivals_while_rfq_short": {
+            "n": 500,
+            "mean": 0.986,
+            "median": 1.0,
+            "p90": 1.0,
+            "max": 1.0
+          },
+          "rfq_wait_for_material_working_minutes": {
+            "n": 500,
+            "mean": 146.0707944885326,
+            "median": 145.25656009121667,
+            "p90": 274.6220845213333,
+            "max": 306.7598461038
+          }
+        },
+        "correlations": {
+          "mean_dlt_minutes": {
+            "n": 500,
+            "pearson": 0.8031499874079437,
+            "spearman": 0.944441744989725
+          },
+          "total_dlt_deviation_minutes": {
+            "n": 500,
+            "pearson": 0.8031499874079437,
+            "spearman": 0.944441744989725
+          }
+        }
+      },
+      {
+        "type": "station",
+        "entity": "Booth B",
+        "label": "critical machine availability",
+        "runs": 500,
+        "complete_pairs": 500,
+        "censored_pairs": 0,
+        "mean_minutes": 196.52741663321396,
+        "mean_complete_pairs_minutes": 196.52741663321396,
+        "mean_complete_pairs_mc95": [
+          161.1310318081692,
+          231.9238014582587
+        ],
+        "median_minutes": {
+          "estimate": 15.895455615083334,
+          "lower": 15.895455615083334,
+          "upper": 15.895455615083334,
+          "mc95": [
+            11.358975863616667,
+            26.6392970903
+          ]
+        },
+        "p90_minutes": {
+          "estimate": 1087.2358197028,
+          "lower": 1087.2358197028,
+          "upper": 1087.2358197028,
+          "mc95": [
+            1079.3495937283,
+            1108.9313883219334
+          ]
+        },
+        "positive": {
+          "estimate": 0.652,
+          "lower": 0.652,
+          "upper": 0.652,
+          "mc95": [
+            0.6092325025566356,
+            0.6924496979430526
+          ]
+        },
+        "material": {
+          "estimate": 0.344,
+          "lower": 0.344,
+          "upper": 0.344,
+          "mc95": [
+            0.3036929655617379,
+            0.38668582866226636
+          ]
+        },
+        "exposures": {
+          "episode_count": {
+            "n": 500,
+            "mean": 1.248,
+            "median": 1.0,
+            "p90": 2.0,
+            "max": 2.0
+          },
+          "working_downtime_minutes": {
+            "n": 500,
+            "mean": 155.32469610510842,
+            "median": 145.15333405701668,
+            "p90": 240.0,
+            "max": 300.0
+          },
+          "mean_episode_working_minutes": {
+            "n": 500,
+            "mean": 126.39610029180402,
+            "median": 120.0,
+            "p90": 166.07108245881668,
+            "max": 179.94058243231666
+          },
+          "max_episode_working_minutes": {
+            "n": 500,
+            "mean": 131.56698792764104,
+            "median": 133.52149431006666,
+            "p90": 168.89125687725,
+            "max": 179.94058243231666
+          },
+          "rfq_assigned_operation_wait_working_minutes": {
+            "n": 500,
+            "mean": 207.16891068225806,
+            "median": 176.39756937856666,
+            "p90": 365.0,
+            "max": 365.0
+          },
+          "rfq_capacity_wait_minutes": {
+            "n": 500,
+            "mean": 32.46687921112056,
+            "median": 31.894249444049997,
+            "p90": 67.68957733888334,
+            "max": 123.97717658760001
+          },
+          "rfq_failure_overlap_minutes": {
+            "n": 500,
+            "mean": 16.214890815690033,
+            "median": 0.0,
+            "p90": 60.749603443683334,
+            "max": 115.50564663995
+          },
+          "factory_run_utilization": {
+            "n": 500,
+            "mean": 0.5798797977016708,
+            "median": 0.5555555555555556,
+            "p90": 0.6018518518518519,
+            "max": 0.7730648613756969
+          }
+        },
+        "correlations": {
+          "working_downtime_minutes": {
+            "n": 500,
+            "pearson": 0.7240380410656214,
+            "spearman": 0.5908022949652022
+          },
+          "episode_count": {
+            "n": 500,
+            "pearson": 0.8522694620564296,
+            "spearman": 0.6978023266447385
+          }
+        }
+      },
+      {
+        "type": "station",
+        "entity": "Punch C",
+        "label": "low observed sensitivity",
+        "runs": 500,
+        "complete_pairs": 500,
+        "censored_pairs": 0,
+        "mean_minutes": 0.0,
+        "mean_complete_pairs_minutes": 0.0,
+        "mean_complete_pairs_mc95": [
+          0.0,
+          0.0
+        ],
+        "median_minutes": {
+          "estimate": 0.0,
+          "lower": 0.0,
+          "upper": 0.0,
+          "mc95": [
+            0.0,
+            0.0
+          ]
+        },
+        "p90_minutes": {
+          "estimate": 0.0,
+          "lower": 0.0,
+          "upper": 0.0,
+          "mc95": [
+            0.0,
+            0.0
+          ]
+        },
+        "positive": {
+          "estimate": 0.0,
+          "lower": 0.0,
+          "upper": 0.0,
+          "mc95": [
+            4.336808689942018e-19,
+            0.007624340461552238
+          ]
+        },
+        "material": {
+          "estimate": 0.0,
+          "lower": 0.0,
+          "upper": 0.0,
+          "mc95": [
+            4.336808689942018e-19,
+            0.007624340461552238
+          ]
+        },
+        "exposures": {
+          "episode_count": {
+            "n": 500,
+            "mean": 3.0,
+            "median": 3.0,
+            "p90": 3.0,
+            "max": 3.0
+          },
+          "working_downtime_minutes": {
+            "n": 500,
+            "mean": 60.0,
+            "median": 60.0,
+            "p90": 60.0,
+            "max": 60.0
+          },
+          "mean_episode_working_minutes": {
+            "n": 500,
+            "mean": 20.0,
+            "median": 20.0,
+            "p90": 20.0,
+            "max": 20.0
+          },
+          "max_episode_working_minutes": {
+            "n": 500,
+            "mean": 20.0,
+            "median": 20.0,
+            "p90": 20.0,
+            "max": 20.0
+          },
+          "rfq_assigned_operation_wait_working_minutes": {
+            "n": 500,
+            "mean": 0.0,
+            "median": 0.0,
+            "p90": 0.0,
+            "max": 0.0
+          },
+          "rfq_capacity_wait_minutes": {
+            "n": 500,
+            "mean": 0.0,
+            "median": 0.0,
+            "p90": 0.0,
+            "max": 0.0
+          },
+          "rfq_failure_overlap_minutes": {
+            "n": 500,
+            "mean": 0.0,
+            "median": 0.0,
+            "p90": 0.0,
+            "max": 0.0
+          },
+          "factory_run_utilization": {
+            "n": 500,
+            "mean": 0.21410946376677079,
+            "median": 0.20512820512820512,
+            "p90": 0.2222222222222222,
+            "max": 0.2854393334310265
+          }
+        },
+        "correlations": {
+          "working_downtime_minutes": {
+            "n": 500,
+            "pearson": null,
+            "spearman": null
+          },
+          "episode_count": {
+            "n": 500,
+            "pearson": null,
+            "spearman": null
+          }
+        }
+      }
+    ],
+    "interactions": [
+      {
+        "entities": [
+          [
+            "supply",
+            [
+              "alloy",
+              "Metals Co"
+            ]
+          ],
+          [
+            "station",
+            "Booth B"
+          ]
+        ],
+        "complete_quartets": 500,
+        "runs": 500,
+        "mean_minutes": 128.87722128223015,
+        "mc95": [
+          93.1034924282516,
+          164.6509501362087
+        ],
+        "nonzero_mc95": true
+      },
+      {
+        "entities": [
+          [
+            "supply",
+            [
+              "alloy",
+              "Metals Co"
+            ]
+          ],
+          [
+            "station",
+            "Punch C"
+          ]
+        ],
+        "complete_quartets": 500,
+        "runs": 500,
+        "mean_minutes": 0.0,
+        "mc95": [
+          0.0,
+          0.0
+        ],
+        "nonzero_mc95": false
+      },
+      {
+        "entities": [
+          [
+            "station",
+            "Booth B"
+          ],
+          [
+            "station",
+            "Punch C"
+          ]
+        ],
+        "complete_quartets": 500,
+        "runs": 500,
+        "mean_minutes": 0.0,
+        "mc95": [
+          0.0,
+          0.0
+        ],
+        "nonzero_mc95": false
+      }
+    ],
+    "full_minus_nominal": {
+      "runs": 500,
+      "complete_pairs": 500,
+      "censored_pairs": 0,
+      "mean_minutes": 495.9289106822581,
+      "mean_complete_pairs_minutes": 495.9289106822581,
+      "mean_complete_pairs_mc95": [
+        447.7210862199669,
+        544.1367351445493
+      ],
+      "median_minutes": {
+        "estimate": 171.39756937856666,
+        "lower": 171.39756937856666,
+        "upper": 171.39756937856666,
+        "mc95": [
+          162.67898097546666,
+          183.21258624686666
+        ]
+      },
+      "p90_minutes": {
+        "estimate": 1320.0,
+        "lower": 1320.0,
+        "upper": 1320.0,
+        "mc95": [
+          1320.0,
+          1320.0
+        ]
+      },
+      "positive": {
+        "estimate": 1.0,
+        "lower": 1.0,
+        "upper": 1.0,
+        "mc95": [
+          0.9923756595384479,
+          1.0
+        ]
+      },
+      "material": {
+        "estimate": 0.954,
+        "lower": 0.954,
+        "upper": 0.954,
+        "mc95": [
+          0.9319222072317267,
+          0.9691548916291838
+        ]
+      }
+    },
+    "total_minus_sum_of_marginals": {
+      "n": 500,
+      "mean_minutes": -128.87722128223015,
+      "mc95": [
+        -164.6509501362087,
+        -93.1034924282516
+      ],
+      "includes_uncontrolled_order_cadence": false
+    },
+    "observation_end": "2026-11-18T16:00:00",
+    "interaction_scope": "Ranked pairs up to the configured limit. Marginal effects can overlap."
+  },
+  "existing_order_impact": {
+    "orders": [
+      {
+        "order": "E-02",
+        "due": "2026-11-16T15:30:00",
+        "runs": 2000,
+        "complete_pairs": 2000,
+        "censored_pairs": 0,
+        "mean_minutes": 204.27973155652057,
+        "mean_complete_pairs_minutes": 204.27973155652057,
+        "mean_complete_pairs_mc95": [
+          192.52618247203472,
+          216.03328064100643
+        ],
+        "median_minutes": {
+          "estimate": 146.90792834681668,
+          "lower": 146.90792834681668,
+          "upper": 146.90792834681668,
+          "mc95": [
+            145.86860058586666,
+            148.422882904
+          ]
+        },
+        "p90_minutes": {
+          "estimate": 218.64086052205,
+          "lower": 218.64086052205,
+          "upper": 218.64086052205,
+          "mc95": [
+            208.83922073548334,
+            230.38167090008332
+          ]
+        },
+        "positive": {
+          "estimate": 0.993,
+          "lower": 0.993,
+          "upper": 0.993,
+          "mc95": [
+            0.9882841374366056,
+            0.9958256539440788
+          ]
+        },
+        "material": {
+          "estimate": 0.989,
+          "lower": 0.989,
+          "upper": 0.989,
+          "mc95": [
+            0.9834005531702528,
+            0.9927245745886817
+          ]
+        },
+        "baseline_p90": "2026-11-16T11:33:51.956019321",
+        "accepted_p90": "2026-11-16T15:02:06.316230057",
+        "marginal_p90_change_minutes": 208.2393368456,
+        "marginal_p90_change_mc95": [
+          190.2656266325,
+          221.77887362801667
+        ],
+        "baseline_on_time": {
+          "estimate": 0.9905,
+          "lower": 0.9905,
+          "upper": 0.9905,
+          "mc95": [
+            0.9852096168457007,
+            0.9939097597713902
+          ]
+        },
+        "accepted_on_time": {
+          "estimate": 0.9325,
+          "lower": 0.9325,
+          "upper": 0.9325,
+          "mc95": [
+            0.9206548165175205,
+            0.9426869375841956
+          ]
+        },
+        "on_time_probability_change": {
+          "estimate": -0.058,
+          "lower": -0.058,
+          "upper": -0.058,
+          "mc95": [
+            -0.06870542534726823,
+            -0.04729457465273178
+          ]
+        },
+        "miss_probability_change": {
+          "estimate": 0.058,
+          "lower": 0.058,
+          "upper": 0.058,
+          "mc95": [
+            0.04729457465273178,
+            0.06870542534726823
+          ]
+        },
+        "material_delay_flag": true
+      },
+      {
+        "order": "E-03",
+        "due": "2026-11-17T12:00:00",
+        "runs": 2000,
+        "complete_pairs": 2000,
+        "censored_pairs": 0,
+        "mean_minutes": 310.95214869941185,
+        "mean_complete_pairs_minutes": 310.95214869941185,
+        "mean_complete_pairs_mc95": [
+          292.58818965666956,
+          329.31610774215414
+        ],
+        "median_minutes": {
+          "estimate": 148.95024976243334,
+          "lower": 148.95024976243334,
+          "upper": 148.95024976243334,
+          "mc95": [
+            146.76077322351668,
+            150.61399585878334
+          ]
+        },
+        "p90_minutes": {
+          "estimate": 1225.3206679055,
+          "lower": 1225.3206679055,
+          "upper": 1225.3206679055,
+          "mc95": [
+            1201.1998952878,
+            1237.2700954564
+          ]
+        },
+        "positive": {
+          "estimate": 0.9905,
+          "lower": 0.9905,
+          "upper": 0.9905,
+          "mc95": [
+            0.9852096168457007,
+            0.9939097597713902
+          ]
+        },
+        "material": {
+          "estimate": 0.9865,
+          "lower": 0.9865,
+          "upper": 0.9865,
+          "mc95": [
+            0.9804292069930002,
+            0.9907055060023408
+          ]
+        },
+        "baseline_p90": "2026-11-16T13:19:23.192717758",
+        "accepted_p90": "2026-11-17T09:00:00",
+        "marginal_p90_change_minutes": 1180.6134547040333,
+        "marginal_p90_change_mc95": [
+          1171.2349264617667,
+          1194.9966469987833
+        ],
+        "baseline_on_time": {
+          "estimate": 0.9935,
+          "lower": 0.9935,
+          "upper": 0.9935,
+          "mc95": [
+            0.9889104708274775,
+            0.9961974035059259
+          ]
+        },
+        "accepted_on_time": {
+          "estimate": 0.962,
+          "lower": 0.962,
+          "upper": 0.962,
+          "mc95": [
+            0.9526962482408641,
+            0.969532400071258
+          ]
+        },
+        "on_time_probability_change": {
+          "estimate": -0.0315,
+          "lower": -0.0315,
+          "upper": -0.0315,
+          "mc95": [
+            -0.03940393081075047,
+            -0.02359606918924953
+          ]
+        },
+        "miss_probability_change": {
+          "estimate": 0.0315,
+          "lower": 0.0315,
+          "upper": 0.0315,
+          "mc95": [
+            0.02359606918924953,
+            0.03940393081075047
+          ]
+        },
+        "material_delay_flag": true
+      },
+      {
+        "order": "E-01",
+        "due": "2026-11-16T16:00:00",
+        "runs": 2000,
+        "complete_pairs": 2000,
+        "censored_pairs": 0,
+        "mean_minutes": 33.40503590930991,
+        "mean_complete_pairs_minutes": 33.40503590930991,
+        "mean_complete_pairs_mc95": [
+          27.846318938950063,
+          38.963752879669755
+        ],
+        "median_minutes": {
+          "estimate": 16.063747340483335,
+          "lower": 16.063747340483335,
+          "upper": 16.063747340483335,
+          "mc95": [
+            15.743862398116667,
+            16.427875584016668
+          ]
+        },
+        "p90_minutes": {
+          "estimate": 33.74921148641667,
+          "lower": 33.74921148641667,
+          "upper": 33.74921148641667,
+          "mc95": [
+            32.15562753215,
+            36.02561599646667
+          ]
+        },
+        "positive": {
+          "estimate": 1.0,
+          "lower": 1.0,
+          "upper": 1.0,
+          "mc95": [
+            0.9980829527187469,
+            0.9999999999999998
+          ]
+        },
+        "material": {
+          "estimate": 0.061,
+          "lower": 0.061,
+          "upper": 0.061,
+          "mc95": [
+            0.05132898110812262,
+            0.07235418640481744
+          ]
+        },
+        "baseline_p90": "2026-11-16T09:50:00",
+        "accepted_p90": "2026-11-16T10:23:44.952689185",
+        "marginal_p90_change_minutes": 33.74921148641667,
+        "marginal_p90_change_mc95": [
+          31.745571571666666,
+          36.6890306256
+        ],
+        "baseline_on_time": {
+          "estimate": 1.0,
+          "lower": 1.0,
+          "upper": 1.0,
+          "mc95": [
+            0.9980829527187469,
+            0.9999999999999998
+          ]
+        },
+        "accepted_on_time": {
+          "estimate": 0.9935,
+          "lower": 0.9935,
+          "upper": 0.9935,
+          "mc95": [
+            0.9889104708274775,
+            0.9961974035059259
+          ]
+        },
+        "on_time_probability_change": {
+          "estimate": -0.0065,
+          "lower": -0.0065,
+          "upper": -0.0065,
+          "mc95": [
+            -0.010022818662046462,
+            -0.0029771813379535364
+          ]
+        },
+        "miss_probability_change": {
+          "estimate": 0.0065,
+          "lower": 0.0065,
+          "upper": 0.0065,
+          "mc95": [
+            0.0029771813379535364,
+            0.010022818662046462
+          ]
+        },
+        "material_delay_flag": false
+      },
+      {
+        "order": "SIDE",
+        "due": "2026-11-19T08:00:00",
+        "runs": 2000,
+        "complete_pairs": 2000,
+        "censored_pairs": 0,
+        "mean_minutes": 0.0,
+        "mean_complete_pairs_minutes": 0.0,
+        "mean_complete_pairs_mc95": [
+          0.0,
+          0.0
+        ],
+        "median_minutes": {
+          "estimate": 0.0,
+          "lower": 0.0,
+          "upper": 0.0,
+          "mc95": [
+            0.0,
+            0.0
+          ]
+        },
+        "p90_minutes": {
+          "estimate": 0.0,
+          "lower": 0.0,
+          "upper": 0.0,
+          "mc95": [
+            0.0,
+            0.0
+          ]
+        },
+        "positive": {
+          "estimate": 0.0,
+          "lower": 0.0,
+          "upper": 0.0,
+          "mc95": [
+            1.0842021724855044e-19,
+            0.0019170472812529331
+          ]
+        },
+        "material": {
+          "estimate": 0.0,
+          "lower": 0.0,
+          "upper": 0.0,
+          "mc95": [
+            1.0842021724855044e-19,
+            0.0019170472812529331
+          ]
+        },
+        "baseline_p90": "2026-11-16T11:02:00.994243869",
+        "accepted_p90": "2026-11-16T11:02:00.994243869",
+        "marginal_p90_change_minutes": 0.0,
+        "marginal_p90_change_mc95": [
+          -11.51568139195,
+          11.51568139195
+        ],
+        "baseline_on_time": {
+          "estimate": 1.0,
+          "lower": 1.0,
+          "upper": 1.0,
+          "mc95": [
+            0.9980829527187469,
+            0.9999999999999998
+          ]
+        },
+        "accepted_on_time": {
+          "estimate": 1.0,
+          "lower": 1.0,
+          "upper": 1.0,
+          "mc95": [
+            0.9980829527187469,
+            0.9999999999999998
+          ]
+        },
+        "on_time_probability_change": {
+          "estimate": 0.0,
+          "lower": 0.0,
+          "upper": 0.0,
+          "mc95": [
+            0.0,
+            0.0
+          ]
+        },
+        "miss_probability_change": {
+          "estimate": 0.0,
+          "lower": 0.0,
+          "upper": 0.0,
+          "mc95": [
+            0.0,
+            0.0
+          ]
+        },
+        "material_delay_flag": false
+      }
+    ],
+    "materially_delayed_orders": 2
+  },
+  "run_status_counts": [
+    {
+      "law": "80/20",
+      "status": "complete",
+      "count": 2000
+    },
+    {
+      "law": "70/30",
+      "status": "complete",
+      "count": 2000
+    },
+    {
+      "law": "90/10",
+      "status": "complete",
+      "count": 2000
+    }
+  ]
+}

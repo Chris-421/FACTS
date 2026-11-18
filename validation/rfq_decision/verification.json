@@ -1,0 +1,41 @@
+{
+  "implementation_commit": "8bef29f604b56b30e875b6b90f68b58e904e590e",
+  "historical_files_verified": 234,
+  "document_prefixes_verified": 3,
+  "deterministic_schedules_replayed": 24,
+  "identical_placements": 913,
+  "frozen_v2_replays": [
+    {
+      "operation_minutes": 18,
+      "shifts": 3,
+      "eta": 0.9,
+      "seed": 147,
+      "activation": "immediate",
+      "maximum_completion_difference_ns": 0
+    },
+    {
+      "operation_minutes": 45,
+      "shifts": 10,
+      "eta": 0.6,
+      "seed": 375,
+      "activation": "immediate",
+      "maximum_completion_difference_ns": 0
+    },
+    {
+      "operation_minutes": 90,
+      "shifts": 20,
+      "eta": 0.75,
+      "seed": 849,
+      "activation": "immediate",
+      "maximum_completion_difference_ns": 0
+    },
+    {
+      "operation_minutes": 72,
+      "shifts": 5,
+      "eta": 0.75,
+      "seed": 731,
+      "activation": "next_assignment",
+      "maximum_completion_difference_ns": 0
+    }
+  ]
+}
