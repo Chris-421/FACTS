@@ -16,6 +16,14 @@ class SensitivityResult:
     diagnostics: pd.DataFrame
 
 
+def association(x, y):
+    paired = pd.DataFrame({"x": x, "y": y}).dropna()
+    left, right = paired.x, paired.y
+    varying = len(paired) >= 2 and left.nunique() > 1 and right.nunique() > 1
+    return {"n": len(paired), "pearson": left.corr(right) if varying else None,
+            "spearman": left.rank().corr(right.rank()) if varying else None}
+
+
 def _exposures(run, machine_exposure):
     features = {}
     cutoff = pd.Timestamp(run.configuration["risk"].observation_end)
@@ -91,11 +99,9 @@ def analyze_risk(experiment, order_id, *, scenario_id="rfq", predictors=None,
     y = values.dropna()
     correlations = []
     for key in features:
-        series = observed[key]
-        varying = len(y) >= 2 and y.nunique() > 1 and series.nunique() > 1
-        pearson = series.corr(y) if varying else np.nan
-        spearman = series.rank().corr(y.rank()) if varying else np.nan
-        correlations.append((*key, len(y), pearson, spearman))
+        relation = association(observed[key], y)
+        correlations.append((*key, relation["n"], np.nan if relation["pearson"] is None else relation["pearson"],
+                             np.nan if relation["spearman"] is None else relation["spearman"]))
     included = [key for key in features if observed[key].nunique() > 1]
     if predictors is not None:
         unknown = set(predictors) - inputs

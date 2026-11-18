@@ -1,6 +1,7 @@
 """Factory data, snapshot records, and dynamic simulation entities."""
 
 import ast
+from copy import copy
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 from decimal import Decimal
@@ -242,6 +243,17 @@ class Model:
         self.jobs_by_order = {key: [self.jobs[key, i] for i in range(1, len(order.lines) + 1)]
                               for key, order in self.orders.items()}
         self.inventory = self._inventory(snapshot)
+
+    def fork(self):
+        """Copy run-local state while sharing the normalized factory inputs."""
+        model = copy(self)
+        model.stations = {key: copy(station) for key, station in self.stations.items()}
+        model.jobs = {key: copy(job) for key, job in self.jobs.items()}
+        model.jobs_by_order = {key: [model.jobs[job.ID_J] for job in jobs] for key, jobs in self.jobs_by_order.items()}
+        model.inventory = {key: copy(inv) for key, inv in self.inventory.items()}
+        for key, inv in model.inventory.items():
+            inv.pending_deliveries = self.inventory[key].pending_deliveries.copy()
+        return model
 
     @staticmethod
     def _table(data, name):

@@ -84,6 +84,16 @@ def _levels(efficiency_levels, planner_weights):
     return levels, weights
 
 
+def sample_efficiency_trials(planner_weights, runs, seed):
+    """Draw a planner efficiency and an independent DES seed per trajectory."""
+    _, weights = _levels(None, planner_weights)
+    belief_seed, run_seed = np.random.SeedSequence(seed).spawn(2)
+    probabilities = np.array(list(weights.values()))
+    levels = np.random.default_rng(belief_seed).choice(list(weights), size=runs, p=probabilities / probabilities.sum())
+    seeds = run_seed.generate_state(runs, dtype=np.uint64)
+    return [(float(level), int(value)) for level, value in zip(levels, seeds, strict=True)]
+
+
 def monte_carlo(data, initial, *, runs, efficiency_levels=None, planner_weights=None, efficiency_settings=None,
                 risk=None, rfq=None, compare=False, seed=0, **options):
     """Run explicit efficiency strata or an operational-risk experiment."""

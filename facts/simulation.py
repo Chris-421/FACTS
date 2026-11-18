@@ -26,16 +26,27 @@ class RunLimits:
 def simulate(data, initial, *, rfq=None, efficiency=None, risk=None, seed=0, inventory=None, limits=None,
              scenario_id=None, run_id=1, scheduling_policy=None, mode=None):
     """Run one scenario. All durations in the input tables are in minutes."""
+    rfq_ids = [] if rfq is None else list(rfq["ID_O"])
+    if scenario_id is None:
+        scenario_id = "baseline" if rfq is None else "rfq"
+    return run_model(Model(data, initial, rfq), rfq_ids, efficiency=efficiency, risk=risk, seed=seed,
+                     inventory=inventory, limits=limits, scenario_id=scenario_id, run_id=run_id,
+                     scheduling_policy=scheduling_policy, mode=mode)
+
+
+def run_model(model, rfq_ids, *, efficiency=None, risk=None, seed=0, inventory=None, limits=None,
+              scenario_id=None, run_id=1, scheduling_policy=None, mode=None, observer=None):
+    """Run an owned normalized model. Paired experiments pass separate forks."""
     if efficiency is not None and risk is not None:
         raise ValueError("Efficiency and explicit operational risk require separate runs")
     selected = "efficiency_mc" if efficiency is not None else "operational_risk_mc" if risk is not None else "deterministic"
     if mode is not None and mode != selected:
         raise ValueError(f"Mode {mode!r} does not match the supplied settings for {selected!r}")
     if scenario_id is None:
-        scenario_id = "baseline" if rfq is None else "rfq"
-    engine = Simulation(Model(data, initial, rfq), inventory or InventoryRules(), limits or RunLimits(),
+        scenario_id = "rfq" if rfq_ids else "baseline"
+    engine = Simulation(model, inventory or InventoryRules(), limits or RunLimits(),
                         efficiency, risk, seed, scenario_id, run_id, scheduling_policy, selected)
-    rfq_ids = [] if rfq is None else list(rfq["ID_O"])
+    engine.observer = observer
     return engine.run(rfq_ids)
 
 
@@ -68,6 +79,7 @@ class Simulation:
         self.diagnostics = []
         self.status = "complete"
         self.initial = None
+        self.observer = None
 
     def _initialize(self):
         shift = self.factory.shift
@@ -159,7 +171,7 @@ class Simulation:
                    "shift_start": shift.t_start, "shift_end": shift.t_done,
                    "efficiency_assumed": self.uncertainty.level,
                    "scheduled_shift_time": minute_count(shift.t_done - shift.t_start),
-                   "loss_budget_initial": minute_count(target),
+                   "loss_budget_initial": None if target is None else minute_count(target),
                    "loss_budget_at_snapshot": None if remaining is None else minute_count(remaining),
                    "loss_budget_remaining": None if remaining is None else minute_count(remaining),
                    "completed_operations": 0, **dict.fromkeys(TIME_FIELDS, 0.0)}
@@ -168,6 +180,8 @@ class Simulation:
         self.journal.event(self.now, "factory", shift.Shift_ID, "shift_initialized" if partial else "shift_start",
                            False, True, shift_number=shift.shift_number)
         self.queue.add(shift.t_done, Event.SHIFT_END)
+        if self.uncertainty.working_loss is not None:
+            self.uncertainty.working_loss.begin_shift(self)
 
     def _end_shift(self):
         shift = self.factory.shift
@@ -190,6 +204,11 @@ class Simulation:
             lost_capacity = False
             for assignment in assignments:
                 key = assignment.ID_WS
+                working_loss = self.uncertainty.working_loss
+                if working_loss is not None and key in working_loss.pending:
+                    working_loss.activate(self, model.stations[key], working_loss.pending.pop(key))
+                    lost_capacity = True
+                    continue
                 duration = self.uncertainty.generic_duration(self, key)
                 if duration is not None:
                     self.start_unavailability(model.stations[key], duration, "GENERIC_EFFICIENCY")
@@ -258,6 +277,8 @@ class Simulation:
         self.journal.event(self.now, "job", job.ID_J, "operation_complete", "processing", job.state, station.ID_WS,
                            step=step, next_step=job.step if job.state == "waiting" else None)
         self.journal.event(self.now, "station", station.ID_WS, "station_release", "processing", "available", job.ID_J)
+        if self.uncertainty.working_loss is not None:
+            self.uncertainty.working_loss.finish(self, station, self.uncertainty.stations[station.ID_WS])
 
     def start_unavailability(self, station, duration, reason, **details):
         if station.state != "available":
@@ -271,6 +292,10 @@ class Simulation:
         if when < self.now:
             raise RuntimeError("The DES clock cannot move backward")
         elapsed = minute_count(when - self.now)
+        if self.observer is not None and self.factory.active and elapsed > 0:
+            self.observer.observe(self, when)
+        if self.uncertainty.working_loss is not None and self.factory.active:
+            self.uncertainty.working_loss.advance(elapsed)
         for job in self.model.jobs.values():
             if job.state == "waiting":
                 self.wait[job.ID_J] += elapsed
@@ -374,6 +399,11 @@ class Simulation:
                              self.elapsed_machine_downtime[key], processing / observed if observed else None))
         stations = j.table(stations, ["ID_WS", "completed_operations", "scheduled_shift_time", *TIME_FIELDS,
                                         "machine_downtime_elapsed", "utilization"])
+        loss = self.uncertainty.working_loss
+        if loss is not None:
+            stations["generic_downtime_generated"] = [loss.generated[key] for key in stations.ID_WS]
+            stations["generic_downtime_outstanding"] = [loss.outstanding.get(key, 0.) for key in stations.ID_WS]
+            stations["generic_downtime_pending"] = [loss.pending.get(key, (0.,))[0] for key in stations.ID_WS]
         metrics = {key: stations[key].sum() for key in TIME_FIELDS}
         metrics.update(completed_orders=sum(row[7] for row in order_rows), waiting_minutes=sum(self.wait.values()),
                        machine_downtime_elapsed=stations["machine_downtime_elapsed"].sum())

@@ -10,7 +10,8 @@ import pandas as pd
 
 from .calendar import timestamp
 from .events import Event
-from .model import Parameter, minute_count, minutes, missing, number
+from .model import Parameter, minute_count, minutes, missing, number, sequence
+from .poisson import PoissonEfficiencySettings, WorkingLoss
 from .scheduling import ModelingDecisionRequired
 
 
@@ -28,6 +29,9 @@ class EfficiencySettings:
 class RiskSettings:
     observation_end: object
     reliability: Mapping | None = None
+    controlled_stations: frozenset = frozenset()
+    controlled_suppliers: frozenset = frozenset()
+    matched_supply_streams: bool = False
 
 
 @dataclass(frozen=True)
@@ -89,6 +93,32 @@ def downtime_probability(budget, remaining):
     return float(np.clip(budget / remaining, 0, 1)) if remaining > 0 else 0.0
 
 
+def machine_reliability(model, risk):
+    configured = dict(risk.reliability or {})
+    unknown = configured.keys() - model.stations.keys()
+    if unknown:
+        raise ValueError(f"Reliability supplied for unknown stations: {unknown}")
+    result = {}
+    for key, station in model.station_data.items():
+        terms = configured.get(key)
+        fields = [station.get(name) for name in ("tbf", "ttr", "initial_tbf_remaining")]
+        if terms is None and not all(missing(field) for field in fields):
+            terms = MachineReliability(*fields)
+        if terms is None:
+            continue
+        if not isinstance(terms, MachineReliability):
+            raise ValueError(f"Reliability for {key!r} must be a MachineReliability")
+        if any(missing(value) for value in (terms.tbf, terms.ttr, terms.initial_tbf_remaining)):
+            raise ValueError(f"Supply TBF, TTR, and initial remaining operating time for {key!r}")
+        result[key] = terms
+    return result
+
+
+def supplier_lead_times(model):
+    return {(material, supplier): terms["DLT"][supplier] if isinstance(terms["DLT"], Mapping) else terms["DLT"]
+            for material, terms in model.materials.items() for supplier in sequence(terms["suppliers"], "Suppliers")}
+
+
 class Uncertainty:
     def __init__(self, model, seed, efficiency, risk):
         self.efficiency = efficiency
@@ -96,6 +126,7 @@ class Uncertainty:
         self.budget = {}
         self.evaluated = {}
         self.exposure_end = None
+        self.working_loss = WorkingLoss(efficiency, model.stations) if isinstance(efficiency, PoissonEfficiencySettings) else None
         station_seed, material_seed = np.random.SeedSequence(seed).spawn(2)
         self.stations = {key: np.random.default_rng(stream)
                          for key, stream in zip(model.stations, station_seed.spawn(len(model.stations)))}
@@ -103,15 +134,17 @@ class Uncertainty:
                             for key, stream in zip(model.materials, material_seed.spawn(len(model.materials)))}
         self.materials = {key: np.random.default_rng(streams[0]) for key, streams in material_streams.items()}
         self.intervals = {key: np.random.default_rng(streams[1]) for key, streams in material_streams.items()}
+        self.supplier_streams = {}
         self.clocks = {}
         if efficiency is not None:
             self.level = number(efficiency.level, "Efficiency")
             if self.level > 1:
                 raise ValueError("Efficiency must be between zero and one")
-            self.minimum = number(efficiency.pareto_minimum, "Pareto minimum", positive=True)
-            self.shape = number(efficiency.pareto_shape, "Pareto shape", positive=True)
-            if efficiency.short_budget not in ("cap", "skip"):
-                raise ValueError("short_budget must be 'cap' or 'skip'")
+            if self.working_loss is None:
+                self.minimum = number(efficiency.pareto_minimum, "Pareto minimum", positive=True)
+                self.shape = number(efficiency.pareto_shape, "Pareto shape", positive=True)
+                if efficiency.short_budget not in ("cap", "skip"):
+                    raise ValueError("short_budget must be 'cap' or 'skip'")
             self.evaluation_level = self.level
         else:
             self.level = 1.0
@@ -121,25 +154,27 @@ class Uncertainty:
             if self.exposure_end <= model.start:
                 raise ValueError("The operational risk observation window must end after the snapshot")
             self.reference_operating_time = model.calendar.shift_time_between(model.start, self.exposure_end)
-            configured = dict(risk.reliability or {})
-            unknown = configured.keys() - model.stations.keys()
-            if unknown:
-                raise ValueError(f"Reliability supplied for unknown stations: {unknown}")
-            for key, station in model.station_data.items():
-                terms = configured.get(key)
-                fields = [station.get(name) for name in ("tbf", "ttr", "initial_tbf_remaining")]
-                if terms is None and not all(missing(field) for field in fields):
-                    terms = MachineReliability(*fields)
-                if terms is None:
+            configured = machine_reliability(model, risk)
+            if set(risk.controlled_stations) - configured.keys():
+                raise ValueError("A controlled station must have configured reliability")
+            if risk.controlled_suppliers and set(risk.controlled_suppliers) - supplier_lead_times(model).keys():
+                raise ValueError("A controlled supplier must identify a configured material and supplier")
+            if risk.matched_supply_streams:
+                for key, terms in model.materials.items():
+                    suppliers = sequence(terms["suppliers"], "Suppliers")
+                    self.supplier_streams.update(
+                        ((key, supplier), np.random.default_rng(stream))
+                        for supplier, stream in zip(suppliers, material_streams[key][0].spawn(len(suppliers)), strict=True))
+            for key, terms in configured.items():
+                if key in risk.controlled_stations:
                     continue
-                if not isinstance(terms, MachineReliability):
-                    raise ValueError(f"Reliability for {key!r} must be a MachineReliability")
-                if any(missing(value) for value in (terms.tbf, terms.ttr, terms.initial_tbf_remaining)):
-                    raise ValueError(f"Supply TBF, TTR, and initial remaining operating time for {key!r}")
                 timing, repair = self.stations[key].spawn(2)
                 self.clocks[key] = MachineClock(key, terms, timing, repair)
 
     def initialize(self, engine):
+        if self.working_loss is not None:
+            self.working_loss.started.update((key, engine.now) for key, station in engine.model.stations.items()
+                                             if station.state == "processing")
         for key, clock in self.clocks.items():
             limit = self.reference_operating_time
             while clock.running_total <= limit:
@@ -154,6 +189,8 @@ class Uncertainty:
                 self.run_operation(engine, key, engine.now)
 
     def run_operation(self, engine, key, completion):
+        if self.working_loss is not None:
+            self.working_loss.started[key] = engine.now
         if key not in self.clocks:
             return
         clock = self.clocks[key]
@@ -168,6 +205,8 @@ class Uncertainty:
             clock.remaining = max(pd.Timedelta(0), clock.remaining - elapsed)
 
     def recover(self, engine, station):
+        if self.working_loss is not None:
+            self.working_loss.outstanding.pop(station.ID_WS, None)
         clock = self.clocks.get(station.ID_WS)
         if clock is None:
             return
@@ -178,6 +217,9 @@ class Uncertainty:
             self.run_operation(engine, station.ID_WS, engine.now)
 
     def begin_shift(self, engine, *, partial):
+        if self.working_loss is not None:
+            self.budget.update(dict.fromkeys(engine.model.stations, None))
+            return None
         shift = engine.factory.shift
         target = (shift.t_done - shift.t_start) * (1 - self.level)
         self.evaluated.clear()
@@ -199,7 +241,7 @@ class Uncertainty:
         return target
 
     def generic_duration(self, engine, station_id):
-        if self.efficiency is None or self.evaluated.get(station_id) == engine.now:
+        if self.efficiency is None or self.working_loss is not None or self.evaluated.get(station_id) == engine.now:
             return None
         self.evaluated[station_id] = engine.now
         remaining = engine.factory.t_done - engine.now
@@ -229,9 +271,12 @@ class Uncertainty:
         return duration if duration > pd.Timedelta(0) else None
 
     def lead_time(self, engine, material, supplier, purchase_id, terms, nominal):
-        if self.risk is None or not isinstance(terms, Parameter) or terms.sampler is None:
+        key = material, supplier
+        if (self.risk is None or key in self.risk.controlled_suppliers or
+                not isinstance(terms, Parameter) or terms.sampler is None):
             return nominal
-        value = number(terms.value(self.materials[material]), f"Sampled DLT for {material!r}")
+        stream = self.supplier_streams.get(key, self.materials[material])
+        value = number(terms.value(stream), f"Sampled DLT for {material!r}")
         engine.journal.draw(engine.now, "supplier", supplier, "lead_time_minutes", value,
                             material=material, purchase_id=purchase_id, delay_minutes=value - nominal,
                             arrival=engine.now + minutes(value, "Sampled DLT"),
